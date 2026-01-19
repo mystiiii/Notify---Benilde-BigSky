@@ -30,11 +30,11 @@ A personal micro-service for Benilde students to automate assignment tracking. N
    cd brightspace-scraper
    npm install
    npx playwright install chromium
-   node server.js```
+   node server.js
 
 3. Setup Frontend:
-  ```bash
+   ```bash
    cd react-frontend
    npm install
-   npm run dev```
+   npm run dev
 
