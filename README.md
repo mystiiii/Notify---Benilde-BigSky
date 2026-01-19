@@ -23,4 +23,18 @@ A personal micro-service for Benilde students to automate assignment tracking. N
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/NOTIFY.git](https://github.com/yourusername/NOTIFY.git)
+   git clone [https://github.com/yourusername/NOTIFY.git](https://github.com/yourusername/NOTIFY.git)```
+
+2. Setup Backend:
+   ```bash
+   cd brightspace-scraper
+   npm install
+   npx playwright install chromium
+   node server.js```
+
+3. Setup Frontend:
+  ```bash
+   cd react-frontend
+   npm install
+   npm run dev```
+
