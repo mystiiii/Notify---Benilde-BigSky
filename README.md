@@ -12,7 +12,7 @@ A personal micro-service for Benilde students to automate assignment tracking. N
 - **Frontend:** React + Tailwind CSS (Vite)
 - **Backend:** Node.js + Express
 - **Automation:** Playwright
-- **Integration:** Apple Shortcuts + n8n
+- **Integration:** n8n
 
 ## 🚀 Getting Started
 
