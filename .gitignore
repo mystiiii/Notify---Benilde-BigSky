@@ -1,0 +1,21 @@
+# Dependency directories
+# This will recursively ignore node_modules in both subfolders
+node_modules/
+
+# Sensitive Data (Login cookies/credentials)
+express-backend/state.json
+.env
+
+# Build outputs
+react-frontend/dist/
+react-frontend/build/
+express-backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor & System files
+.vscode/
+.idea/
+.DS_Store
