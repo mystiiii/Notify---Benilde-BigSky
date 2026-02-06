@@ -10,6 +10,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    icon: path.join(__dirname, 'assets/icon.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -48,12 +49,21 @@ function startBackend() {
   // In built app, we configure extraResources to copy express-backend
   serverPath = path.join(process.resourcesPath, 'express-backend', 'server.js');
 
+  // Ensure the storage directory exists
+  const userDataPath = app.getPath('userData');
+  const storagePath = path.join(userDataPath, 'state.json');
+
   console.log('Starting backend from:', serverPath);
+  console.log('Storage path for backend:', storagePath);
 
   if (fs.existsSync(serverPath)) {
     backendProcess = fork(serverPath, [], {
       silent: false, // Let it print to console for now
-      env: { ...process.env, PORT: 3000 }
+      env: {
+        ...process.env,
+        PORT: 3000,
+        STORAGE_PATH: storagePath
+      }
     });
   } else {
     console.error('Backend server file not found at:', serverPath);
@@ -63,6 +73,14 @@ function startBackend() {
 app.on('ready', () => {
   startBackend();
   createWindow();
+
+  // Set dock icon for macOS during development
+  if (process.platform === 'darwin' && !app.isPackaged) {
+    const iconPath = path.join(__dirname, 'assets/icon.png');
+    if (fs.existsSync(iconPath)) {
+      app.dock.setIcon(iconPath);
+    }
+  }
 });
 
 app.on('window-all-closed', function () {

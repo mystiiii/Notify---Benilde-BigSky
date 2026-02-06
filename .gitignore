@@ -7,6 +7,8 @@ express-backend/state.json
 .env
 
 # Build outputs
+dist/
+release/
 react-frontend/dist/
 react-frontend/build/
 express-backend/dist/

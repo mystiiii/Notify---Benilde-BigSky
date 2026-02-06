@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 
-const STORAGE_FILE = 'state.json';
+const STORAGE_FILE = process.env.STORAGE_PATH || 'state.json';
 
 const parseDate = (dateStr) => {
     if (!dateStr || dateStr === 'No Due Date') return new Date(8640000000000000);
