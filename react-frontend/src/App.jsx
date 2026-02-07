@@ -28,6 +28,46 @@ const getDaysRemaining = (dueDate) => {
   }
 };
 
+// Modal Component
+const Modal = ({ title, message, onClose }) => {
+  if (!message) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in">
+        <div className="p-6">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="bg-red-100 p-3 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">{title || "Error"}</h3>
+              <p className="text-sm text-gray-500">Something went wrong</p>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
+            <p className="text-sm text-gray-700 font-medium leading-relaxed">
+              {message}
+            </p>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              onClick={onClose}
+              className="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all transform active:scale-95 shadow-lg shadow-gray-200"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [data, setData] = useState({ user: null, assignments: [] });
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +75,17 @@ function App() {
   const [viewMode, setViewMode] = useState("timeline"); // 'timeline' or 'course'
   const [selectedCourses, setSelectedCourses] = useState([]); // Array of strings
   const [showUrgentOnly, setShowUrgentOnly] = useState(false);
+
+  // Error State
+  const [errorState, setErrorState] = useState({ title: "", message: null });
+
+  const showError = (title, message) => {
+    setErrorState({ title, message });
+  };
+
+  const closeError = () => {
+    setErrorState({ title: "", message: null });
+  };
 
   const handleScrape = async () => {
     setIsLoading(true);
@@ -46,11 +97,11 @@ function App() {
         setData(result);
         setSelectedCourses([]); // Reset filters on new sync
       } else {
-        alert("Error: " + result.error);
+        showError("Sync Failed", result.error || "Unknown error occurred during sync.");
       }
     } catch (error) {
       console.error("Scrape failed:", error);
-      alert("Could not connect to the scraper backend.");
+      showError("Connection Error", "Could not connect to the scraper backend. Please ensure the backend server is running.");
     } finally {
       setIsLoading(false);
     }
@@ -189,6 +240,7 @@ function App() {
       setData({ user: null, assignments: [] });
     } catch (err) {
       console.error("Logout failed:", err);
+      showError("Logout Error", "Failed to clear session data.");
     }
   };
 
@@ -237,6 +289,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+      <Modal
+        title={errorState.title}
+        message={errorState.message}
+        onClose={closeError}
+      />
+
       <nav className="bg-white border-b border-gray-200 py-3 mb-8 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex flex-col">

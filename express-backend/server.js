@@ -39,4 +39,16 @@ app.post('/logout', (req, res) => {
   }
 });
 
+// Auto-delete state.json every 2.5 hours (9,000,000 ms) to handle cookie expiration
+setInterval(() => {
+  if (fs.existsSync(STORAGE_FILE)) {
+    try {
+      fs.unlinkSync(STORAGE_FILE);
+      console.log(`[Auto-Cleanup] Deleted ${STORAGE_FILE} at ${new Date().toISOString()}`);
+    } catch (err) {
+      console.error(`[Auto-Cleanup] Failed to delete ${STORAGE_FILE}:`, err);
+    }
+  }
+}, 9000000);
+
 app.listen(PORT, () => console.log(`NOT!FY Backend: http://localhost:${PORT}`));
